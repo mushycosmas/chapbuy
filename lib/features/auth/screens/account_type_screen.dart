@@ -33,7 +33,9 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+
               const SizedBox(height: 8),
+
               const Text(
                 'Select how you want to use ChapBuy.',
                 style: TextStyle(
@@ -41,6 +43,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                   color: Colors.black54,
                 ),
               ),
+
               const SizedBox(height: 28),
 
               _buildOptionCard(
@@ -48,6 +51,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                 subtitle:
                     'Shop from trusted sellers and discover amazing deals.',
                 value: 'buyer',
+                icon: Icons.shopping_bag_outlined,
               ),
 
               const SizedBox(height: 16),
@@ -57,6 +61,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                 subtitle:
                     'Create your store, list products and manage sales easily.',
                 value: 'supplier',
+                icon: Icons.storefront,
               ),
 
               const Spacer(),
@@ -97,6 +102,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
     required String title,
     required String subtitle,
     required String value,
+    required IconData icon,
   }) {
     final bool selected = _selectedType == value;
 
@@ -109,7 +115,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -122,9 +128,40 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
               ? AppColors.primaryGreen.withOpacity(0.05)
               : Colors.white,
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Icon(
+              icon,
+              size: 38,
+              color: AppColors.primaryGreen,
+            ),
+
+            const SizedBox(height: 12),
+
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
+                height: 1.5,
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
             Radio<String>(
               value: value,
               groupValue: _selectedType,
@@ -134,30 +171,6 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                   _selectedType = value!;
                 });
               },
-            ),
-            const SizedBox(width: 4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black54,
-                      height: 1.5,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),
