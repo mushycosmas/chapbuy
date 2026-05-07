@@ -6,6 +6,12 @@ import 'verification_screen.dart';
 import 'manage_notification_screen.dart';
 import 'payment_methods_screen.dart';
 import 'change_password_screen.dart';
+import '../../seller_homepage/screens/home_seller_screen.dart';
+
+// ── Tab Switcher Helper ───────────────────────────────────────────────────────
+class ProfileTabSwitcher {
+  static void Function(int index)? switchTab;
+}
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -70,11 +76,8 @@ class ProfileScreen extends StatelessWidget {
                     const Text('John Walker',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black87)),
                     const SizedBox(height: 4),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text('Manage your account and preferences',
-                          style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
-                    ),
+                    Text('Manage your account and preferences',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
                   ],
                 ),
               ),
@@ -84,15 +87,32 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
+                    // Dashboard → HomeSellerScreen (tab index 0)
+                    _ProfileMenuItem(
+                        icon: Icons.dashboard_outlined,
+                        label: 'Dashboard',
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const HomeSellerScreen(),
+                            ),
+                          );
+                        },
+                        ),
                     _ProfileMenuItem(
                       icon: Icons.settings_outlined,
                       label: 'Account Settings',
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountSettingsScreen())),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const AccountSettingsScreen())),
                     ),
                     _ProfileMenuItem(
                       icon: Icons.inventory_2_outlined,
                       label: 'Product Listing',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        ProfileTabSwitcher.switchTab?.call(1);
+                      },
                     ),
                     _ProfileMenuItem(
                       icon: Icons.verified_outlined,
@@ -104,24 +124,31 @@ class ProfileScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text('Needs attention',
-                            style: TextStyle(fontSize: 10, color: AppColors.error, fontWeight: FontWeight.w600)),
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.error,
+                                fontWeight: FontWeight.w600)),
                       ),
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const VerificationScreen())),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const VerificationScreen())),
                     ),
                     _ProfileMenuItem(
                       icon: Icons.notifications_outlined,
                       label: 'Manage Notification',
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ManageNotificationScreen())),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const ManageNotificationScreen())),
                     ),
                     _ProfileMenuItem(
                       icon: Icons.payment_outlined,
                       label: 'Payment Methods',
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PaymentMethodsScreen())),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const PaymentMethodsScreen())),
                     ),
                     _ProfileMenuItem(
                       icon: Icons.lock_outline,
                       label: 'Change Password',
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ForgotPasswordScreen())),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const ForgotPasswordScreen())),
                     ),
                     const SizedBox(height: 8),
                     _ProfileMenuItem(
@@ -179,14 +206,19 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        ProfileTabSwitcher.switchTab?.call(0);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.error,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
-                      child: const Text('Logout', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                      child: const Text('Logout',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                     ),
                   ),
                 ],
@@ -228,7 +260,9 @@ class _ProfileMenuItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: bgColor ?? Colors.white,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [BoxShadow(color: Colors.grey.shade100, blurRadius: 6, offset: const Offset(0, 2))],
+          boxShadow: [
+            BoxShadow(color: Colors.grey.shade100, blurRadius: 6, offset: const Offset(0, 2))
+          ],
         ),
         child: Row(
           children: [
