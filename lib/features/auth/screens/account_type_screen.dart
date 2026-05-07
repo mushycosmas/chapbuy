@@ -11,6 +11,14 @@ class AccountTypeScreen extends StatefulWidget {
 class _AccountTypeScreenState extends State<AccountTypeScreen> {
   String _selectedType = 'buyer';
 
+  void _continue() {
+    if (_selectedType == 'buyer') {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,9 +86,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  },
+                  onPressed: _continue,
                   child: const Text(
                     'Continue',
                     style: TextStyle(
@@ -129,7 +135,6 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
               : Colors.white,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               icon,
@@ -160,7 +165,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
               ),
             ),
 
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
 
             Radio<String>(
               value: value,
