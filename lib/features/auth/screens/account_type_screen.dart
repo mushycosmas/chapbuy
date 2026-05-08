@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:chapbuy/core/constants/app_colors.dart';
+import 'package:chapbuy/features/navigation/main_bottom_nav_screen.dart';
 
 class AccountTypeScreen extends StatefulWidget {
   const AccountTypeScreen({super.key});
@@ -12,11 +13,16 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
   String _selectedType = 'buyer';
 
   void _continue() {
-    if (_selectedType == 'buyer') {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      Navigator.pushReplacementNamed(context, '/home');
-    }
+    final role = _selectedType == 'seller'
+        ? UserRole.seller
+        : UserRole.buyer;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MainBottomNavScreen(role: role),
+      ),
+    );
   }
 
   @override
@@ -56,8 +62,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
 
               _buildOptionCard(
                 title: 'Continue as Buyer',
-                subtitle:
-                    'Shop from trusted sellers and discover amazing deals.',
+                subtitle: 'Shop from trusted sellers and discover amazing deals.',
                 value: 'buyer',
                 icon: Icons.shopping_bag_outlined,
               ),
@@ -65,10 +70,9 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
               const SizedBox(height: 16),
 
               _buildOptionCard(
-                title: 'Continue as Supplier',
-                subtitle:
-                    'Create your store, list products and manage sales easily.',
-                value: 'supplier',
+                title: 'Continue as Seller',
+                subtitle: 'Create your store, list products and manage sales easily.',
+                value: 'seller',
                 icon: Icons.storefront,
               ),
 
@@ -89,9 +93,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                   onPressed: _continue,
                   child: const Text(
                     'Continue',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -171,9 +173,10 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
               value: value,
               groupValue: _selectedType,
               activeColor: AppColors.primaryGreen,
-              onChanged: (value) {
+              onChanged: (val) {
+                if (val == null) return;
                 setState(() {
-                  _selectedType = value!;
+                  _selectedType = val;
                 });
               },
             ),
