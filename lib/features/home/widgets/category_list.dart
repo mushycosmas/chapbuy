@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:chapbuy/core/constants/app_colors.dart';
+import 'package:chapbuy/features/categories/screens/category_products_screen.dart';
 
 class CategoryList extends StatelessWidget {
   final List<String> categories;
@@ -9,7 +10,6 @@ class CategoryList extends StatelessWidget {
     required this.categories,
   });
 
-  // ✅ ICON LOGIC INSIDE THIS WIDGET
   IconData _getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
       case 'maize':
@@ -36,10 +36,21 @@ class CategoryList extends StatelessWidget {
     }
   }
 
+  void _openCategory(BuildContext context, String category) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CategoryProductsScreen(
+          categoryName: category,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
+      height: 110,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
@@ -47,31 +58,37 @@ class CategoryList extends StatelessWidget {
         itemBuilder: (context, index) {
           final category = categories[index];
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 62,
-                height: 62,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFFF3F3F3),
+          return GestureDetector(
+            onTap: () => _openCategory(context, category),
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 62,
+                  height: 62,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFF3F3F3),
+                  ),
+                  child: Icon(
+                    _getCategoryIcon(category),
+                    color: AppColors.primaryGreen,
+                    size: 28,
+                  ),
                 ),
-                child: Icon(
-                  _getCategoryIcon(category),
-                  color: AppColors.primaryGreen,
-                  size: 28,
+
+                const SizedBox(height: 8),
+
+                Text(
+                  category,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                category,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

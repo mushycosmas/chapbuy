@@ -13,7 +13,6 @@ class TopSellers extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         // HEADER
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,87 +33,112 @@ class TopSellers extends StatelessWidget {
 
         const SizedBox(height: 12),
 
-        // ✅ HORIZONTAL SCROLL ADDED HERE
+        // LIST
         SizedBox(
           height: 210,
           child: ListView.separated(
-            scrollDirection: Axis.horizontal, // 🔥 X-axis scroll
+            scrollDirection: Axis.horizontal,
             itemCount: sellers.length,
             separatorBuilder: (_, __) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final seller = sellers[index];
 
+              final String imageUrl = seller['image'] ?? '';
+              final String name = seller['name'] ?? 'Unknown Seller';
+              final String location = seller['location'] ?? 'Tanzania';
+              final int years = seller['years'] ?? 0;
+              final double rating = (seller['rating'] ?? 0).toDouble();
+              final int sales = seller['sales'] ?? 0;
+              final int products = seller['products'] ?? 0;
+
               return Container(
-                width: 300,
+                width: 170,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.grey.shade200),
+                  color: Colors.white,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
-                    // TOP ROW (IMAGE + NAME)
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 28,
-                          backgroundImage: NetworkImage(seller['image']),
-                        ),
-
-                        const SizedBox(width: 12),
-
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                seller['name'],
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              const SizedBox(height: 4),
-
-                              Row(
-                                children: [
-                                  const Icon(Icons.location_on,
-                                      size: 14, color: Colors.grey),
-                                  const SizedBox(width: 4),
-                                  Text(seller['location']),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const Icon(Icons.arrow_forward_ios, size: 16),
-                      ],
+                    // LOGO
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.grey.shade100,
+                      backgroundImage:
+                          imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
+                      child: imageUrl.isEmpty
+                          ? const Icon(
+                              Icons.business,
+                              size: 28,
+                              color: Colors.grey,
+                            )
+                          : null,
                     ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
 
-                    // STATS ROW 1
+                    // NAME
+                    Text(
+                      name,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    // LOCATION
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildInfo("⭐ Rating", "${seller['rating']}"),
-                        _buildInfo("🏆 Years", "${seller['years']} yrs"),
-                        _buildInfo("📦 Products", "${seller['products']}"),
+                        const Icon(
+                          Icons.location_on,
+                          size: 10,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          location,
+                          style: TextStyle(
+                            fontSize: 9,
+                            color: Colors.grey[600],
+                          ),
+                        ),
                       ],
                     ),
 
                     const SizedBox(height: 10),
 
-                    // STATS ROW 2
+                    // TOP STATS
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildInfo("💰 Sales", "${seller['sales']}"),
-                        _buildInfo("📍 Status", "Verified"),
+                        _StatBox(value: "$years", label: "Years"),
+                        _StatBox(
+                          value: rating.toStringAsFixed(1),
+                          label: "Rating",
+                          icon: Icons.star,
+                          iconColor: const Color(0xFFFFB800),
+                        ),
+                        _StatBox(value: "$sales", label: "Sales"),
+                      ],
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // BOTTOM STATS
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _StatBox(value: "$products", label: "Products"),
+                        _StatBox(value: "$sales", label: "Orders"),
+                        _StatBox(value: "$rating", label: "Score"),
                       ],
                     ),
                   ],
@@ -126,23 +150,49 @@ class TopSellers extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildInfo(String title, String value) {
+/// Reusable stat widget
+class _StatBox extends StatelessWidget {
+  final String value;
+  final String label;
+  final IconData? icon;
+  final Color? iconColor;
+
+  const _StatBox({
+    required this.value,
+    required this.label,
+    this.icon,
+    this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
+        Row(
+          children: [
+            if (icon != null)
+              Icon(
+                icon,
+                size: 10,
+                color: iconColor ?? Colors.grey,
+              ),
+            if (icon != null) const SizedBox(width: 2),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 2),
         Text(
-          value,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
+          label,
+          style: TextStyle(
+            fontSize: 8,
+            color: Colors.grey[500],
           ),
         ),
       ],

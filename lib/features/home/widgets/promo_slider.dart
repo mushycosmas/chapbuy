@@ -6,6 +6,25 @@ class PromoSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<LinearGradient> gradients = [
+      const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [Color(0xFFFE9A00), Color(0xFFF54900)],
+        stops: [-0.022, 1.1916], // Matches 100.98deg angle approximation
+      ),
+      const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [Color(0xFF009966), Color(0xFF00BBA7)],
+      ),
+      const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [Color(0xFF009689), Color(0xFF0092B8)],
+      ),
+    ];
+
     return SizedBox(
       height: 170,
       child: ListView.separated(
@@ -17,7 +36,7 @@ class PromoSlider extends StatelessWidget {
             width: 310,
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: AppColors.primaryGreen,
+              gradient: gradients[index % gradients.length],
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -28,43 +47,50 @@ class PromoSlider extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Up to 30% OFF',
+                        '25% OFF',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 23,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-
-                      const SizedBox(height: 8),
-
+                      const SizedBox(height: 6),
                       const Text(
-                        'Discover exclusive deals today.',
+                        'Fresh Farm Produce',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Direct from local farmers',
                         style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 13,
+                          fontSize: 12,
                           height: 1.4,
                         ),
                       ),
-
-                      const SizedBox(height: 16),
-
+                      const SizedBox(height: 12),
                       SizedBox(
-                        height: 40,
+                        height: 32,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor: AppColors.primaryGreen,
+                            foregroundColor: Colors.black87,
                             elevation: 0,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                           onPressed: () {},
                           child: const Text(
-                            'Shop Now',
+                            'Shop now',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
+                              fontSize: 13,
                             ),
                           ),
                         ),
@@ -72,21 +98,19 @@ class PromoSlider extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(width: 12),
-
                 Container(
-                  width: 100,
-                  height: 110,
+                  width: 70,
+                  height: 90,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.12),
+                    color: Colors.white.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Center(
                     child: Icon(
-                      Icons.shopping_bag_outlined,
+                      Icons.eco,
                       color: Colors.white,
-                      size: 48,
+                      size: 40,
                     ),
                   ),
                 ),
